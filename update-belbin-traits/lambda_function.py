@@ -51,7 +51,7 @@ def lambda_handler(event, context):
         # Return a successful response
         response = {
             'status': 200,
-            'body': json.dumps({'message': 'User added successfully', 'id': user_id})
+            'body': json.dumps({'message': f'Belbin traits assigned to {user_id} successfully'})
         }
     except Exception as e:
         # Handle specific errors and return an error response
