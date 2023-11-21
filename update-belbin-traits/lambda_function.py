@@ -1,6 +1,5 @@
 import json
 import boto3
-import uuid
 
 # Initialize the DynamoDB client
 dynamodb = boto3.client('dynamodb')
@@ -25,28 +24,28 @@ def lambda_handler(event, context):
         user_id = event["user_id"]
 
         if not user_exists(user_id):
-            raise Exception("User Does Not Exist")
+            raise Exception(f'User {user_id} Does Not Exist')
         
         # Create an item to put into DynamoDB
         points = {
-            ':ri': {'N': event["belbin_traits"]["resource_investigator"]},
-            ':tm': {'N': event["belbin_traits"]["teamworker"]},
-            ':co': {'N': event["belbin_traits"]["coordinator"]},
-            ':pt': {'N': event["belbin_traits"]["plant"]},
-            ':me': {'N': event["belbin_traits"]["monitor_evaluator"]},
-            ':sp': {'N': event["belbin_traits"]["specialist"]},
-            ':sh': {'N': event["belbin_traits"]["shaper"]},
-            ':im': {'N': event["belbin_traits"]["implementer"]},
-            ':cf': {'N': event["belbin_traits"]["completer_finisher"]},
+            "ResourceInvestigator": event["belbin_traits"]["resource_investigator"],
+            "Teamworker": event["belbin_traits"]["teamworker"],
+            "Co-ordinator": event["belbin_traits"]["coordinator"],
+            "Plant": event["belbin_traits"]["plant"],
+            "MonitorEvaluator": event["belbin_traits"]["monitor_evaluator"],
+            "Specialist": event["belbin_traits"]["specialist"],
+            "Shaper": event["belbin_traits"]["shaper"],
+            "Implementer": event["belbin_traits"]["implementer"],
+            "CompleterFinisher": event["belbin_traits"]["completer_finisher"]
         }
-
-        query = "SET ri = :ri, tm = :tm, co = :co, pt = :pt, me = :me, sp = :sp, sh = :sh, im = :im, cf = :cf"
+        points_attribute_values = {f':{key}': {'N': str(value)} for key, value in points.items()}
+        query = "SET belbin_traits = :belbin_traits"
         
         # Update the item in DynamoDB
         dynamodb.update_item(TableName=table_name, 
-                             Key={id: user_id}, 
+                             Key={'id': {'S': user_id}}, 
                              UpdateExpression=query,
-                             ExpressionAttributeValues=points
+                             ExpressionAttributeValues={':belbin_traits': {'M': points_attribute_values}}
                              )
         
         # Return a successful response
@@ -64,12 +63,12 @@ def lambda_handler(event, context):
     
     return response
 
-def user_exists(email):
+def user_exists(user_id):
     # Check if a user with the same email already exists
     response = dynamodb.scan(
         TableName=table_name,
-        FilterExpression='email = :email',
-        ExpressionAttributeValues={':email': {'S': email}}
+        FilterExpression='id = :id',
+        ExpressionAttributeValues={':id': {'S': user_id}}
     )
     
     return len(response.get('Items', [])) > 0
