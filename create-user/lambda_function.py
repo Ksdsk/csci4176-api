@@ -42,7 +42,7 @@ def lambda_handler(event, context):
         # Return a successful response
         response = {
             'status': 200,
-            'body': json.dumps({'message': 'User added successfully', 'id': user_id})
+            'body': {'message': 'User added successfully', 'id': user_id}
         }
     except Exception as e:
         # Handle specific errors and return an error response
@@ -50,12 +50,12 @@ def lambda_handler(event, context):
         if 'already exists' in error_message.lower():
             response = {
                 'status': 409,  # Conflict
-                'body': json.dumps({'error': error_message})
+                'body': {'error': error_message}
             }
         else:
             response = {
                 'status': 500,
-                'body': json.dumps({'error': error_message})
+                'body': {'error': error_message}
             }
     
     return response

@@ -22,24 +22,24 @@ def lambda_handler(event, context):
             if verify_password(password, user_data['hash_password']['S']):
                 response = {
                     'statusCode': 200,
-                    'body': json.dumps({'message': 'Login successful', 'id': user_data['id']['S']})
+                    'body': {'message': 'Login successful', 'id': user_data['id']['S']}
                 }
             else:
                 response = {
                     'statusCode': 401,
-                    'body': json.dumps({'message': 'Invalid password'})
+                    'body': {'message': 'Invalid password'}
                 }
         else:
             response = {
                 'statusCode': 404,
-                'body': json.dumps({'message': 'User not found'})
+                'body': {'message': 'User not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': {'error': str(e)}
         }
     
     return response

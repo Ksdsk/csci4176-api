@@ -1,6 +1,5 @@
 import json
 import boto3
-import bcrypt
 
 # Initialize the DynamoDB client
 dynamodb = boto3.client('dynamodb')
@@ -24,37 +23,38 @@ def lambda_handler(event, context):
             }
 
             # Belbin
-            if user_data['belbin_traits']:
-                body["belbin_traits"]["teamworker"] = user_data['belbin_traits']["teamworker"]['N']
-                body["belbin_traits"]["resource_investigator"] = user_data['belbin_traits']["resource_investigator"]['N']
-                body["belbin_traits"]["implementer"] = user_data['belbin_traits']["implementer"]['N']
-                body["belbin_traits"]["completer_finisher"] = user_data['belbin_traits']["completer_finisher"]['N']
-                body["belbin_traits"]["monitor_evaluator"] = user_data['belbin_traits']["monitor_evaluator"]['N']
-                body["belbin_traits"]["shaper"] = user_data['belbin_traits']["shaper"]['N']
-                body["belbin_traits"]["specialist"] = user_data['belbin_traits']["specialist"]['N']
-                body["belbin_traits"]["coordinator"] = user_data['belbin_traits']["coordinator"]['N']
-                body["belbin_traits"]["plant"] = user_data['belbin_traits']["plant"]['N']
+            if "belbin_traits" in user_data:
+                body["belbin_traits"] = {}
+                body["belbin_traits"]["teamworker"] = int(user_data['belbin_traits']["M"]["teamworker"]['N'])
+                body["belbin_traits"]["resource_investigator"] = int(user_data['belbin_traits']["M"]["resource_investigator"]['N'])
+                body["belbin_traits"]["implementer"] = int(user_data['belbin_traits']["M"]["implementer"]['N'])
+                body["belbin_traits"]["completer_finisher"] = int(user_data['belbin_traits']["M"]["completer_finisher"]['N'])
+                body["belbin_traits"]["monitor_evaluator"] = int(user_data['belbin_traits']["M"]["monitor_evaluator"]['N'])
+                body["belbin_traits"]["shaper"] = int(user_data['belbin_traits']["M"]["shaper"]['N'])
+                body["belbin_traits"]["specialist"] = int(user_data['belbin_traits']["M"]["specialist"]['N'])
+                body["belbin_traits"]["coordinator"] = int(user_data['belbin_traits']["M"]["coordinator"]['N'])
+                body["belbin_traits"]["plant"] = int(user_data['belbin_traits']["M"]["plant"]['N'])
 
             # Phone
-            if user_data['phone_number']:
-                body["phone_number"] = user_data["phone_number"]
+            if "phone_number" in user_data:
+                body["phone_number"] = user_data["phone_number"]["S"]
             
             response = {
                 'statusCode': 200,
-                'body': json.dumps({'message': 'Success', "info" :body})
+                'body': {'message': 'Success', "info" :body}
             }
 
         else:
             response = {
                 'statusCode': 404,
-                'body': json.dumps({'message': 'User not found'})
+                'body': {'message': 'User not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
             'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
+            'body': {'error': str(e)}
         }
     
     return response

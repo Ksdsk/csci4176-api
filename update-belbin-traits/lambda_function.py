@@ -28,17 +28,17 @@ def lambda_handler(event, context):
         
         # Create an item to put into DynamoDB
         points = {
-            "ResourceInvestigator": event["belbin_traits"]["resource_investigator"],
-            "Teamworker": event["belbin_traits"]["teamworker"],
-            "Co-ordinator": event["belbin_traits"]["coordinator"],
-            "Plant": event["belbin_traits"]["plant"],
-            "MonitorEvaluator": event["belbin_traits"]["monitor_evaluator"],
-            "Specialist": event["belbin_traits"]["specialist"],
-            "Shaper": event["belbin_traits"]["shaper"],
-            "Implementer": event["belbin_traits"]["implementer"],
-            "CompleterFinisher": event["belbin_traits"]["completer_finisher"]
+            "resource_investigator": event["belbin_traits"]["resource_investigator"],
+            "teamworker": event["belbin_traits"]["teamworker"],
+            "coordinator": event["belbin_traits"]["coordinator"],
+            "plant": event["belbin_traits"]["plant"],
+            "monitor_evaluator": event["belbin_traits"]["monitor_evaluator"],
+            "specialist": event["belbin_traits"]["specialist"],
+            "shaper": event["belbin_traits"]["shaper"],
+            "implementer": event["belbin_traits"]["implementer"],
+            "completer_finisher": event["belbin_traits"]["completer_finisher"]
         }
-        points_attribute_values = {f':{key}': {'N': str(value)} for key, value in points.items()}
+        points_attribute_values = {f'{key}': {'N': str(value)} for key, value in points.items()}
         query = "SET belbin_traits = :belbin_traits"
         
         # Update the item in DynamoDB
@@ -51,14 +51,14 @@ def lambda_handler(event, context):
         # Return a successful response
         response = {
             'status': 200,
-            'body': json.dumps({'message': f'Belbin traits assigned to {user_id} successfully'})
+            'body':{'message': f'Belbin traits assigned to {user_id} successfully'}
         }
     except Exception as e:
         # Handle specific errors and return an error response
         error_message = str(e)
         response = {
             'status': 500,
-            'body': json.dumps({'error': error_message})
+            'body': {'error': error_message}
         }
     
     return response
