@@ -31,6 +31,7 @@ def lambda_handler(event, context):
             'id': {'S': user_id},
             'email': {'S': email},
             'hash_password': {'S': hashed_password},
+            'registered_classes': {'L': []}
         }
         
         if phone_number:

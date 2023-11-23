@@ -19,7 +19,8 @@ def lambda_handler(event, context):
             body = {
                 'message': 'Success', 
                 'id': user_data['id']['S'],
-                'email': user_data['email']['S']
+                'email': user_data['email']['S'],
+                'registered_classes': user_data['registered_classes']['L']
             }
 
             # Belbin
