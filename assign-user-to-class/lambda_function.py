@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         # Check if user is already registered
         if user_already_registered(user_id, class_id):
             response = {
-                'statusCode': 400,
+                'status': 400,
                 'body': {'message': 'User is already registered'}
             }   
             return response
@@ -48,24 +48,24 @@ def lambda_handler(event, context):
                              ExpressionAttributeValues={':class': {'L': [{'N': class_id}]}}
                              )
                 response = {
-                    'statusCode': 200,
+                    'status': 200,
                     'body': {'message': 'User added to class successfully', 'id': class_data['id']['N']}
                 }
             else:
                 response = {
-                    'statusCode': 401,
+                    'status': 401,
                     'body': {'message': 'Invalid password'}
                 }
         else:
             response = {
-                'statusCode': 404,
+                'status': 404,
                 'body': {'message': 'Class not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
-            'statusCode': 500,
+            'status': 500,
             'body': {'error': str(e)}
         }
     

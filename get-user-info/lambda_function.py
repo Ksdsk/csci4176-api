@@ -20,7 +20,7 @@ def lambda_handler(event, context):
                 'message': 'Success', 
                 'id': user_data['id']['S'],
                 'email': user_data['email']['S'],
-                'registered_classes': user_data['registered_classes']['L']
+                'registered_classes': [registered_class["N"] for registered_class in user_data['registered_classes']['L']]
             }
 
             # Belbin
@@ -41,20 +41,20 @@ def lambda_handler(event, context):
                 body["phone_number"] = user_data["phone_number"]["S"]
             
             response = {
-                'statusCode': 200,
+                'status': 200,
                 'body': {'message': 'Success', "info" :body}
             }
 
         else:
             response = {
-                'statusCode': 404,
+                'status': 404,
                 'body': {'message': 'User not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
-            'statusCode': 500,
+            'status': 500,
             'body': {'error': str(e)}
         }
     

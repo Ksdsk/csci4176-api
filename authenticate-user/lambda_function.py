@@ -21,24 +21,24 @@ def lambda_handler(event, context):
             # Verify the provided password against the stored hashed password
             if verify_password(password, user_data['hash_password']['S']):
                 response = {
-                    'statusCode': 200,
+                    'status': 200,
                     'body': {'message': 'Login successful', 'id': user_data['id']['S']}
                 }
             else:
                 response = {
-                    'statusCode': 401,
+                    'status': 401,
                     'body': {'message': 'Invalid password'}
                 }
         else:
             response = {
-                'statusCode': 404,
+                'status': 404,
                 'body': {'message': 'User not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
-            'statusCode': 500,
+            'status': 500,
             'body': {'error': str(e)}
         }
     

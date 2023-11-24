@@ -13,7 +13,7 @@ table_name = 'class_table'
 def lambda_handler(event, context):
     try:
         # Extract class data
-        password = event['password']
+        password = event['class_password']
         class_name = event['class_name']
 
         # Extract user data

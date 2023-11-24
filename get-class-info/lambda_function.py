@@ -23,21 +23,28 @@ def lambda_handler(event, context):
                 'students': [student['S'] for student in class_data['students']['L']]
             }
 
+            if "teams" in class_data:
+                teams = class_data["teams"]["M"]
+                serialized = {}
+                for team in teams:
+                    serialized[team] = [student["S"] for student in teams[team]["L"]]
+                body["teams"] = serialized
+
             response = {
-                'statusCode': 200,
+                'status': 200,
                 'body': {'message': 'Success', "info" :body}
             }
 
         else:
             response = {
-                'statusCode': 404,
+                'status': 404,
                 'body': {'message': 'Class not found'}
             }
 
     except Exception as e:
         # Handle any errors and return an error response
         response = {
-            'statusCode': 500,
+            'status': 500,
             'body': {'error': str(e)}
         }
     
