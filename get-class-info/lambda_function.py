@@ -20,6 +20,7 @@ def lambda_handler(event, context):
                 'message': 'Success', 
                 'id': class_data['id']['N'],
                 'class_organizer': class_data['class_organizer']['S'],
+                'class_name': class_data['class_name']['S'],
                 'students': [student['S'] for student in class_data['students']['L']]
             }
 
